@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { HelpCircle } from "lucide-react";
 import Container from "@/components/layout/Container";
@@ -8,8 +8,16 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import Input from "@/components/ui/Input";
 import Textarea from "@/components/ui/Textarea";
 import Button from "@/components/ui/Button";
-import { programs } from "@/data/programs";
 import { useLanguage } from "@/components/providers/LanguageProvider";
+
+const PROGRAMS_API_URL = process.env.NEXT_PUBLIC_API_URL!;
+
+interface Program {
+  slug: string;
+  title: string;
+  titleEn: string;
+}
+
 
 const timelineSteps = [
   {
@@ -59,6 +67,7 @@ const faqs = [
 
 export default function AdmissionsPage() {
   const { locale, t } = useLanguage();
+  const [programs, setPrograms] = useState<Program[]>([]);
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -67,6 +76,13 @@ export default function AdmissionsPage() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    fetch(PROGRAMS_API_URL)
+      .then((res) => res.json())
+      .then((data) => setPrograms(data))
+      .catch((err) => console.error("Lỗi tải danh sách chương trình:", err));
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<

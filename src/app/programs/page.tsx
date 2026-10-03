@@ -35,7 +35,7 @@ export default function ProgramsPage() {
   const { locale, t } = useLanguage();
 
   useEffect(() => {
-    const API_URL = "https://script.google.com/macros/s/AKfycbxXlwsAgGNIM0k0yh84EcxW_4f6AS120rcuw6B38-fKWtZxhPYwjoazgLnNXvKQ5DNN/exec"; 
+    const API_URL = process.env.NEXT_PUBLIC_API_URL!;
 
     fetch(API_URL)
       .then(res => res.json())

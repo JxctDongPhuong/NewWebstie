@@ -28,15 +28,9 @@ export default function NewsPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const API_URL = "https://script.google.com/macros/library/d/1FjonClAk_4xxzvPGhGQRNUNWj1I47Mr1bUkCt7u6QFCWrE7FCVmiAuNd/3";
-    if (!API_URL) {
-      console.error("Thiếu biến môi trường NEXT_PUBLIC_APPS_SCRIPT_URL");
-      setIsLoading(false);
-      return;
-    }
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL}?sheet=news`;
 
-   
-fetch("https://script.google.com/macros/s/AKfycbxXlwsAgGNIM0k0yh84EcxW_4f6AS120rcuw6B38-fKWtZxhPYwjoazgLnNXvKQ5DNN/exec=news")
+    fetch(API_URL)
       .then((res) => res.json())
       .then((data) => {
         // Đảm bảo cột featured được hiểu là boolean (đúng/sai) kể cả khi Google Sheets trả về chữ "TRUE"
