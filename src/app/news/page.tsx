@@ -22,6 +22,10 @@ interface NewsArticle {
   featured: boolean; // Dùng để highlight thẻ tin tức
 }
 
+interface RawNewsItem extends Omit<NewsArticle, "featured"> {
+  featured?: boolean | string;
+}
+
 export default function NewsPage() {
   const { locale, t } = useLanguage();
   const [news, setNews] = useState<NewsArticle[]>([]);
@@ -32,9 +36,9 @@ export default function NewsPage() {
 
     fetch(API_URL)
       .then((res) => res.json())
-      .then((data) => {
+      .then((data: RawNewsItem[]) => {
         // Đảm bảo cột featured được hiểu là boolean (đúng/sai) kể cả khi Google Sheets trả về chữ "TRUE"
-        const formattedData = data.map((item: any) => ({
+        const formattedData = data.map((item: RawNewsItem) => ({
           ...item,
           featured: item.featured === true || item.featured === "TRUE" || item.featured === "true"
         }));
